@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
+
   # Remembers a user in a persistent session.
   def remember(user)
     user.remember
@@ -42,7 +42,6 @@ class ApplicationController < ActionController::Base
     session.delete(:user_id)
     @current_user = nil
   end
- 
 
   # Logs in the given user.
   def log_in(user)
@@ -53,5 +52,4 @@ class ApplicationController < ActionController::Base
   def logged_in?
     !current_user.nil?
   end
-
 end
