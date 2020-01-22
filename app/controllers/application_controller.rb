@@ -1,6 +1,14 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  include SessionsHelper
+  helper_method :logged_in?
+  helper_method :current_user
+  # Confirms a logged-in user.
+  def logged_in_user
+    unless logged_in?
+      flash[:danger] = 'Please log in.'
+      redirect_to login_url
+    end
+  end
 
   # Returns the current logged-in user (if any).
   def current_user
@@ -14,22 +22,12 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-
-  # Logs in the given user.
-  def log_in(user)
-    session[:user_id] = user.id
-  end
-
+  
   # Remembers a user in a persistent session.
   def remember(user)
     user.remember
     cookies.permanent.signed[:user_id] = user.id
     cookies.permanent[:remember_token] = user.remember_token
-  end
-
-  # Returns true if the user is logged in, false otherwise.
-  def logged_in?
-    !current_user.nil?
   end
 
   def forget(user)
@@ -38,18 +36,22 @@ class ApplicationController < ActionController::Base
     cookies.delete(:remember_token)
   end
 
-  # Confirms a logged-in user.
-  def logged_in_user
-    unless logged_in?
-      flash[:danger] = 'Please log in.'
-      redirect_to login_url
-    end
-  end
-
   # Logs out the current user.
   def log_out
     forget(current_user)
     session.delete(:user_id)
     @current_user = nil
   end
+ 
+
+  # Logs in the given user.
+  def log_in(user)
+    session[:user_id] = user.id
+  end
+
+  # Returns true if the user is logged in, false otherwise.
+  def logged_in?
+    !current_user.nil?
+  end
+
 end
