@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :logged_in_user, only: [:new, :create]
+  before_action :logged_in_user, only: %i[new create]
   # GET /posts
   # GET /posts.json
   def index
@@ -12,7 +12,7 @@ class PostsController < ApplicationController
 
   # GET /posts/new
   def new
-    @post = current_user.posts.new
+    @post = Post.new
   end
 
   # GET /posts/1/edit
