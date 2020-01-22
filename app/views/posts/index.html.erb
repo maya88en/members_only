@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Posts</h1>
+
+<table>
+  <tbody>
+  <ul class="posts">
+  <% @posts.each do |post| %>
+	  <li>
+			Title: <%= post.title %><br>
+			<% if logged_in? %>
+			  <% user = User.find(post.user_id) %>
+				Author: <%= user.name %><br>
+			<% end %>
+			Post: <%= post.body %>
+		</li><br>
+	<% end %>
+</ul>
+  </tbody>
+</table>
+
