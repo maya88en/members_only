@@ -2,14 +2,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :logged_in?
   helper_method :current_user
+  include SessionsHelper
   # Confirms a logged-in user.
-  def logged_in_user
-    return if logged_in?
-
-    flash[:danger] = 'Please log in.'
-    redirect_to login_url
-  end
-
   # Returns the current logged-in user (if any).
   def current_user
     if (user_id = session[:user_id])
@@ -53,4 +47,11 @@ class ApplicationController < ActionController::Base
     !current_user.nil?
   end
   
+  private 
+  def logged_in_user
+    return if logged_in?
+    store_location
+    flash[:danger] = 'Please log in.'
+    redirect_to login_url
+  end
 end
